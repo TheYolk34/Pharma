@@ -1,0 +1,47 @@
+.illness-card {
+    background: #b3e5fc; /* Голубой фон карточки */
+    border-radius: 12px;
+    overflow: hidden;
+    width: 300px; /* Фиксированная ширина, как в макете */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+.illness-card:hover {
+    transform: translateY(-5px);
+}
+
+.illness-image {
+    width: 100%;
+    height: 130px; /* Высота изображения, как в макете */
+    object-fit: cover;
+}
+
+.illness-name {
+    width: 100%;
+    font-size: 1.2rem;
+    font-weight: bold;
+    background: #00695c; /* Темно-зеленый цвет заголовка */
+    color: white;
+    text-align: center;
+    padding: 10px;
+}
+
+.illness-details {
+    font-size: 0.9rem;
+    color: #333;
+    text-align: center;
+    padding: 10px;
+}
+
+/* Контейнер для карточек (трехколоночный макет) */
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    justify-content: center;
+    padding: 20px;
+}

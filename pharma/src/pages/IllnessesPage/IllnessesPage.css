@@ -1,0 +1,86 @@
+/* Общий контейнер страницы */
+.clinpharm-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Контейнер для контента */
+
+
+/* Поисковая строка */
+.search-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    overflow: hidden;
+    background-color: white;
+    padding: 5px 10px;
+    width: 300px;
+}
+
+.search-input {
+    border: none;
+    outline: none;
+    flex-grow: 1;
+    padding: 8px;
+    font-size: 14px;
+}
+
+.search-button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.search-icon {
+    width: 18px;
+    height: 18px;
+}
+
+/* Кнопка добавления лекарства */
+.plus-button-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.plus-button-container a {
+    text-decoration: none;
+}
+
+.plus-button-container img {
+    width: 40px;
+    height: 40px;
+}
+
+.badge-position {
+    position: absolute;
+    top: 0;
+    right: -10px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #00695c;
+    background-color: transparent;
+}
+
+/* Контейнер для карточек (трехколоночный макет) */
+.cards-container {
+    padding-left: 10%;
+    padding-right: 10%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 100px;
+}
+

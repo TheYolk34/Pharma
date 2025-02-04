@@ -1,0 +1,80 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import API from "../../api/API";
+import { BreadCrumbs } from "../../components/BreadCrumbs/BreadCrumbs";
+import { ROUTE_LABELS } from "../../Route.tsx";
+import { ILLNESSES_MOCK } from "../../modules/mock";
+import "./IllnessPage.css";
+
+interface Illness {
+    id: string;
+    name: string;
+    description: string;
+    photo: string;
+}
+
+const IllnessPage = () => {
+    const { illnessId } = useParams<{ illnessId: string }>();
+    const [illness, setIllness] = useState<Illness | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const getIllnessDetails = async () => {
+            if (!illnessId) return;
+
+            try {
+                const response = await API.getIllnessDetails(illnessId);
+                const data = await response.json();
+                setIllness(data);
+            } catch (error) {
+                console.error("Ошибка при загрузке данных о болезни:", error);
+                const mockIllness = ILLNESSES_MOCK.find((i) => String(i.id) === illnessId);
+                if (mockIllness) {
+                    setIllness(mockIllness);
+                    setError(null);
+                } else {
+                    setError("Болезнь не найдена в mock-данных");
+                }
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        getIllnessDetails();
+    }, [illnessId]);
+
+    if (loading) {
+        return <div>Загрузка...</div>;
+    }
+
+    if (!illness) {
+        return <div>Болезнь не найдена.</div>;
+    }
+
+    return (
+        <div>
+            <div className="breadcrumbs-illness">
+                <BreadCrumbs
+                    crumbs={[
+                        { label: ROUTE_LABELS.ILLNESSES, path: '/illnesses' },
+                        { label: illness.name || "Болезнь" },
+                    ]}
+                />
+            </div>
+            <div className="illness-page">
+                <div className="illness-details">
+                    <div className="illness-image-card">
+                        <img src={illness.photo} alt={illness.name} />
+                    </div>
+                    <div className="illness-info">
+                        <h1>{illness.name}</h1>
+                        <p><strong>Описание:</strong> {illness.description}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default IllnessPage;
