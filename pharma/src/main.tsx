@@ -1,39 +1,54 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom' 
-import './index.css'
+import { createRoot } from 'react-dom/client';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import './index.css';
 
 import MainPage from './pages/IllnessesPage/IllnessesPage';
 import IllnessPage from './pages/IllnessPage/IllnessPage';
-import {HomePage} from './pages/HomePage/HomePage';
+import { HomePage } from './pages/HomePage/HomePage';
 import Layout from './components/Layout/Layout';
+import store from './store';
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element:( 
-      <Layout>
-        <HomePage />
-      </Layout>)
-  },
-  {
-    path: '/illnesses',
-    element:( 
-    <Layout>
-      <MainPage />
-    </Layout>)
-  },
-  {
-    path: '/illnesses/:illnessId',
-    element:( 
-      <Layout>
-        <IllnessPage />
-      </Layout>)
-  },
-])
+const router = createBrowserRouter(
+  [
+    {
+      path: '/',
+      element: (
+        <Layout>
+          <HomePage />
+        </Layout>
+      ),
+    },
+    {
+      path: '/illnesses',
+      element: (
+        <Layout>
+          <MainPage />
+        </Layout>
+      ),
+    },
+    {
+      path: '/illnesses/:illnessId',
+      element: (
+        <Layout>
+          <IllnessPage />
+        </Layout>
+      ),
+    },
+  ],
+);
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
+  <Provider store={store}>
     <RouterProvider router={router}></RouterProvider>
-  </StrictMode>,
-)
+  </Provider>
+);
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker
+      .register('/Pharma/sw.js')
+      .then(() => console.log('service worker registered'))
+      .catch((err) => console.log('service worker not registered', err));
+  });
+}

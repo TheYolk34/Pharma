@@ -2,29 +2,10 @@ import { ILLNESSES_MOCK } from "../modules/mock";
 "use strict";
 
 
-interface Illness {
-    id: string;
-    name: string;
-    description: string;
-    spread: string;
-    photo: string;
-};
-
-interface RegisterParams {
-    username: string;
-    password: string;
-}
-
-interface LoginParams {
-    username: string;
-    password: string;
-}
-
-
 import Ajax from "./Ajax.ts";
 
 const API = {
-    BASE_URL: `http://${window.location.hostname}:3000/api`,
+    BASE_URL: `http://192.168.31.6:3000/api`,
 
     // async login({ username, password }: LoginParams) {
     //     const url = this.BASE_URL + "/login/";

@@ -7,6 +7,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-top: 50px; /* Добавлен отступ от хедера */
 }
 
 .overlay {
@@ -62,4 +63,35 @@
     text-align: center;
     color: #ccc;
     font-size: 0.8rem;
+}
+
+@media (max-width: 400px) {
+    .home {
+        margin-top: 30px; /* Меньший отступ от хедера для мобильных устройств */
+    }
+
+    .content {
+        max-width: 90%;
+        padding: 10px;
+    }
+
+    .content h1 {
+        font-size: 2rem;
+        margin-bottom: 15px;
+    }
+
+    .content p {
+        font-size: 1rem;
+        line-height: 1.4;
+        margin-bottom: 20px;
+    }
+
+    .custom-button {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+
+    .home-page-custom-footer {
+        font-size: 0.7rem;
+    }
 }

@@ -10,7 +10,7 @@
 
 
 /* Поисковая строка */
-.search-section {
+.search-section { 
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -84,3 +84,14 @@
     gap: 100px;
 }
 
+
+@media (max-width: 400px) {
+    .illness-card-container {
+        width: 66.7%;
+    }
+
+    .illness-card-grid {
+        grid-template-columns: 1fr;
+        gap: 20px 10px;
+    }
+}

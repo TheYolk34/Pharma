@@ -1,10 +1,5 @@
 'use strict';
 
-interface PostParams {
-    url: string;
-    body: object;
-}
-
 interface RequestParams {
     url: string;
     body?: object;
@@ -31,29 +26,38 @@ class Ajax {
             controller.abort();
         }, timeout);
 
-        let request: Request;
-        if (method === 'GET') {
-            request = new Request(url, {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include',
-                signal: controller.signal,
-            });
-        } else {
-            request = new Request(url, {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include',
-                body: JSON.stringify(body),
-                signal: controller.signal,
-            });
+
+
+        try {
+            let request: Request;
+            if (method === 'GET') {
+                request = new Request(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                    signal: controller.signal,
+                });
+            } else {
+                request = new Request(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify(body),
+                    signal: controller.signal,
+                });
+            }
+
+            const response = await fetch(request);
+            clearTimeout(timeoutId); // Отмена таймера, если запрос завершен до истечения времени
+            return response;
+        } catch (error) {
+            clearTimeout(timeoutId); // Отмена таймера в случае ошибки
+            throw error;
         }
-        
-        return await fetch(request);
     }
 }
 

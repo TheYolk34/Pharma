@@ -48,6 +48,10 @@ const IllnessPage = () => {
         return <div>Загрузка...</div>;
     }
 
+    if (error) {
+        return <div>{error}</div>;
+    }
+
     if (!illness) {
         return <div>Болезнь не найдена.</div>;
     }

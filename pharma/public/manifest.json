@@ -1,0 +1,35 @@
+{
+    "name": "Pharma",
+    "short_name": "Pharma",
+    "start_url": "/Pharma/",
+    "display": "standalone",
+    "background_color": "#000000",
+    "theme_color": "#00001a",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "/Pharma/icon2.png",
+            "type": "image/png",
+            "sizes": "1024x1024",
+            "purpose": "any"
+        },
+        {
+            "src": "/Pharma/icon2.png",
+            "type": "image/png",
+            "sizes": "1024x1024",
+            "purpose": "maskable"
+        },
+        {
+            "src": "/Pharma/web-app-manifest-192x192.png",
+            "type": "image/png",
+            "sizes": "192x192",
+            "purpose": "maskable"
+        },
+        {
+            "src": "/Pharma/web-app-manifest-512x512.png",
+            "type": "image/png",
+            "sizes": "512x512",
+            "purpose": "maskable"
+        }
+    ]
+}

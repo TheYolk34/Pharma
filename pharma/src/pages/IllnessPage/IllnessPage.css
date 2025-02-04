@@ -59,3 +59,37 @@
 .add-request-button:hover {
     background-color: #fdd835;
 }
+
+@media (max-width: 400px) {
+    .illness-page {
+        padding: 10px;
+    }
+
+    .illness-details {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .illness-image-card {
+        max-width: 80%;
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+
+    .illness-image-card img {
+        max-width: 100%;
+    }
+
+    .illness-info {
+        max-width: 80%;
+        padding: 10px;
+    }
+
+    .illness-info p {
+        font-size: 16px;
+    }
+
+    .illness-info strong {
+        font-size: 18px;
+    }
+}

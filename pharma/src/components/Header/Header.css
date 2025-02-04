@@ -29,3 +29,26 @@
     margin-left: 15%;
     background-color: #ffffff;
 }
+
+@media (max-width: 400px) {
+    .header {
+        height: 80px;
+        padding-inline-start: 20px;
+        padding-inline-end: 20px;
+        justify-content: flex-start;
+    }
+
+    .header img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .header a {
+        margin-left: 10px;
+    }
+
+    .header::after {
+        width: 90%;
+        margin-left: 5%;
+    }
+}
