@@ -8,28 +8,41 @@
     "orientation": "portrait-primary",
     "icons": [
         {
-            "src": "/Pharma/icon2.png",
+            "src": "icon2.png",
             "type": "image/png",
             "sizes": "1024x1024",
             "purpose": "any"
         },
         {
-            "src": "/Pharma/icon2.png",
+            "src": "icon2.png",
             "type": "image/png",
             "sizes": "1024x1024",
             "purpose": "maskable"
         },
         {
-            "src": "/Pharma/web-app-manifest-192x192.png",
+            "src": "web-app-manifest-192x192.png",
             "type": "image/png",
             "sizes": "192x192",
             "purpose": "maskable"
         },
         {
-            "src": "/Pharma/web-app-manifest-512x512.png",
+            "src": "web-app-manifest-512x512.png",
             "type": "image/png",
             "sizes": "512x512",
             "purpose": "maskable"
         }
-    ]
+    ],
+    "screenshots": [
+    {
+      "src": "desktop.png",
+      "sizes": "1280x800",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "mobile.png",
+      "sizes": "750x1334",
+      "type": "image/png"
+    }
+  ]
 }

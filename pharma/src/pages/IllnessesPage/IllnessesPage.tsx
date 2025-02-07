@@ -3,8 +3,8 @@ import { useDispatch } from "react-redux";
 import { setIllnessName, useTitle } from "../../slices/illnessesSlice"; // Используем только существующие экшены и селекторы
 import API from "../../api/API";
 import IllnessCard from "../../components/IllnessCard/IllnessCard";
-import { BreadCrumbs } from "../../components/BreadCrumbs/BreadCrumbs";
-import { ROUTE_LABELS } from "../../Route.tsx";
+//import { BreadCrumbs } from "../../components/BreadCrumbs/BreadCrumbs";
+//import { ROUTE_LABELS } from "../../Route.tsx";
 import { ILLNESSES_MOCK } from "../../modules/mock";
 import "./IllnessesPage.css";
 
@@ -37,7 +37,7 @@ const IllnessesPage: FC = () => {
     }, []);
 
     const filteredIllnesses = illnesses.filter((illness) =>
-        illness.spread.toLowerCase().includes(searchQuery.toLowerCase())
+        illness.spread && illness.spread.toLowerCase().includes(searchQuery.toLowerCase())
     );
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value); // Обновляем локальное состояние строки поиска

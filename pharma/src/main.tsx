@@ -1,6 +1,7 @@
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import {registerSW} from "virtual:pwa-register";
 import './index.css';
 
 import MainPage from './pages/IllnessesPage/IllnessesPage';
@@ -47,8 +48,7 @@ createRoot(document.getElementById('root')!).render(
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function () {
     navigator.serviceWorker
-      .register('/Pharma/sw.js')
-      .then(() => console.log('service worker registered'))
-      .catch((err) => console.log('service worker not registered', err));
+      registerSW()
+      
   });
 }
