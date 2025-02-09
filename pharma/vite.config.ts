@@ -26,14 +26,14 @@ export default defineConfig({
       key: fs.readFileSync(path.resolve(__dirname, 'cert.key')),
       cert: fs.readFileSync(path.resolve(__dirname, 'cert.crt')),
     },
-    proxy: {
-      '/api': {
-        target: 'http://192.168.31.169:8000',
-        changeOrigin: true,
-        secure: false,
-        rewrite: (path) => path.replace(/^\/api/, '/'),
-      },
-    },
+    // proxy: {
+    //   '/api': {
+    //     target: 'http://192.168.31.169:8000',
+    //     changeOrigin: true,
+    //     secure: false,
+    //     rewrite: (path) => path.replace(/^\/api/, '/'),
+    //   },
+    // },
   },
   plugins: [
     react(),

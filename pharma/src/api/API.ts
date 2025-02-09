@@ -5,7 +5,7 @@ import { ILLNESSES_MOCK } from "../modules/mock";
 import Ajax from "./Ajax.ts";
 
 const API = {
-    BASE_URL: `https://192.168.31.169:3000/api`,
+    BASE_URL: `http://localhost:8000`,
 
     // async login({ username, password }: LoginParams) {
     //     const url = this.BASE_URL + "/login/";
