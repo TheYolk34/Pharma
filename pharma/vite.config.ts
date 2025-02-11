@@ -35,6 +35,7 @@ export default defineConfig({
       },
     },
   },
+  base: "/Pharma",
   plugins: [
     react(),
     mkcert(),

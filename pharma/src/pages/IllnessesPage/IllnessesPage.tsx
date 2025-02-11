@@ -66,7 +66,7 @@ const IllnessesPage: FC = () => {
                             onChange={handleSearchChange}
                         />
                         <button type="button" className="search-button" onClick={handleIllnessNameChange}>
-                            <img src="/search.png" className="search-icon" alt="Search" />
+                            <img src="/Pharma/search.png" className="search-icon" alt="Search" />
                         </button>
                     </div>
                     {/* <div className="d-flex flex-column align-items-end position-relative plus-button-container">
