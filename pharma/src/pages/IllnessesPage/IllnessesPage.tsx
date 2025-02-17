@@ -1,11 +1,14 @@
 import { FC, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { setIllnessName, useTitle } from "../../slices/illnessesSlice"; // Используем только существующие экшены и селекторы
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import API from "../../api/API";
 import IllnessCard from "../../components/IllnessCard/IllnessCard";
 //import { BreadCrumbs } from "../../components/BreadCrumbs/BreadCrumbs";
 //import { ROUTE_LABELS } from "../../Route.tsx";
 import { ILLNESSES_MOCK } from "../../modules/mock";
+import { setDraftDrug } from "../../slices/drugSlice"; 
+import { selectSearchQuery, setSearchQuery } from "../../slices/illnessesSlice"; // Импортируем новый экшен и селектор
+import { RootState } from "../../store";
 import "./IllnessesPage.css";
 
 interface Illness {
@@ -17,18 +20,24 @@ interface Illness {
 
 const IllnessesPage: FC = () => {
     const dispatch = useDispatch();
-    const illnessName = useTitle(); // Получаем строку поиска из Redux
-    const [illnesses, setIllnesses] = useState<Illness[]>([]); // Локальное состояние для списка кораблей
-    const [searchQuery, setSearchQuery] = useState(illnessName || ""); // Инициализируем строку поиска значением из Redux
+    const navigate = useNavigate();
+    const { count, draftDrugId } = useSelector((state: RootState) => state.drug);
+    const searchQuery = useSelector(selectSearchQuery); // Получаем строку поиска из Redux
+
+    const [illnesses, setIllnesses] = useState<Illness[]>([]);
 
     const getIllnesses = async () => {
         try {
             const response = await API.getIllnesses();
             const data = await response.json();
-            setIllnesses(data.illnesses); // Устанавливаем корабли в локальное состояние
+            setIllnesses(data.illnesses);
+            dispatch(setDraftDrug({
+                draftDrugId: data.draft_drug_id,
+                count: data.count,
+            }));
         } catch (error) {
             console.error("Ошибка при загрузке данных с бэкенда:", error);
-            setIllnesses(ILLNESSES_MOCK); // Если ошибка, используем мок-данные
+            setIllnesses(ILLNESSES_MOCK);
         }
     };
 
@@ -40,17 +49,14 @@ const IllnessesPage: FC = () => {
         illness.spread && illness.spread.toLowerCase().includes(searchQuery.toLowerCase())
     );
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchQuery(e.target.value); // Обновляем локальное состояние строки поиска
+        dispatch(setSearchQuery(e.target.value)); // Обновляем локальное состояние строки поиска
     };
 
-    const handleIllnessNameChange = () => {
-        dispatch(setIllnessName(searchQuery)); // Обновляем строку поиска в Redux
+    const handleGoToDrug = () => {
+        if (draftDrugId) {
+            navigate(`/drugs/${draftDrugId}`);
+        } // Обновляем строку поиска в Redux
     };
-
-    useEffect(() => {
-        // Если строка поиска изменяется, обновляем Redux
-        dispatch(setIllnessName(searchQuery));
-    }, [searchQuery, dispatch]);
 
 
     return (
@@ -65,22 +71,15 @@ const IllnessesPage: FC = () => {
                             value={searchQuery}
                             onChange={handleSearchChange}
                         />
-                        <button type="button" className="search-button" onClick={handleIllnessNameChange}>
-                            <img src="/Pharma/search.png" className="search-icon" alt="Search" />
-                        </button>
+                        <div
+                            onClick={count > 0 ? handleGoToDrug : undefined}
+                            style={{ cursor: count > 0 ? 'pointer' : 'not-allowed' }}
+                        >
+                            <img src="/plus.png" className="bucket-icon" />
+                            <span className="bucket-count">{count}</span>
+                        </div>
                     </div>
-                    {/* <div className="d-flex flex-column align-items-end position-relative plus-button-container">
-                        {drug ? (
-                            <a href={`/drug/${drug.id}`}>
-                                <img src="/plus.png" height="50px" alt="Drug" />
-                            </a>
-                        ) : (
-                            <a href="#" className="btn btn-outline-warning">
-                                <img src="/plus.png" height="50px" alt="Drug" />
-                            </a>
-                        )}
-                        <span className="badge bg-warning badge-position">{drug ? drug.count : 0}</span>
-                    </div> */}
+                    
                 </div>
                 <div className="cards-container three-columns">
                     {filteredIllnesses.length === 0 ? (

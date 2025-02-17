@@ -1,0 +1,217 @@
+.drug-page {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.drug-name-input {
+    width: 35%;
+    height: 22px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 18px; /* Увеличенный шрифт */
+    color: black; /* Чёрный текст */
+    background-color: #fff;
+    resize: none;
+    display: block;
+    margin: 0 auto; /* Центрирование по горизонтали */
+}
+
+.drug-container {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.illnesses-column {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-left: 20%;
+}
+
+.illness-card {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: white;
+    display: flex; /* Устанавливаем flex для размещения контента в строку */
+    flex-direction: column;
+    width: 60%; /* Фиксированная ширина карточки */
+    align-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    overflow: hidden;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.illness-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.illness-content {
+    display: flex; /* Flex-контейнер для фото и информации */
+    align-items: center; /* Выравнивание по вертикали */
+    gap: 15px; /* Отступ между фото и текстом */
+}
+
+.illness-photo {
+    width: 120px; /* Ширина фото */
+    height: 120px; /* Высота фото */
+    border-radius: 5px;
+}
+
+.illness-info-drug h4 {
+    font-size: 18px;
+    margin: 10px 0 10px;
+    text-align: center;
+}
+
+.illness-info-drug p {
+    margin: 5px 0;
+    font-size: 14px;
+    text-align: center;
+}
+
+.admirals-column {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: calc(2 * 17%);
+}
+
+.drug-result-input {
+    width: 35%;
+    height: 22px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 18px; /* Увеличенный шрифт */
+    color: black; /* Чёрный текст */
+    background-color: #fff;
+    resize: none;
+    display: block;
+    margin: 0 auto; /* Центрирование по горизонтали */
+}
+
+.drug-name-fix {
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+.drug-result-fix {
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.drug-container {
+    display: flex;
+    flex-direction: column; /* Расположение рядов */
+    gap: 15px; /* Расстояние между строками */
+}
+
+.drug-row {
+    width: 70%;
+    display: flex;
+    gap: 20px; /* Расстояние между карточкой корабля и адмирала */
+    align-items: center; /* Выравнивание по вертикали */
+    margin: 0 auto;
+}
+
+.admiral-card {
+    width: 300px
+}
+
+.admiral-input {
+    font-size: 16px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    padding: 5px;
+}
+
+.illness-photo {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.drug-submit,
+.drug-delete {
+    display: block; /* Чтобы кнопки встали по центру */
+    width: 30%; /* 20% ширины экрана */
+    margin: 10px auto; /* Центрирование по горизонтали и небольшой отступ между кнопками */
+    padding: 10px 0;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    color: white; /* Белый текст */
+}
+
+.illness-delete {
+    display: block; /* Чтобы кнопки встали по центру */
+    width: 70%; /* 20% ширины экрана */
+    margin: 10px auto; /* Центрирование по горизонтали и небольшой отступ между кнопками */
+    padding: 10px 0;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    color: white; /* Белый текст */
+}
+
+.drug-submit {
+    background-color: #007bff; /* Синий цвет */
+}
+
+.drug-submit:hover {
+    background-color: #0056b3; /* Более темный синий при наведении */
+}
+
+.drug-delete {
+    background-color: #dc3545; /* Красный цвет */
+}
+
+.drug-delete:hover {
+    background-color: #a71d2a; /* Более темный красный при наведении */
+}
+
+.illness-delete {
+    background-color: #dc3545; /* Красный цвет */
+}
+
+.illness-delete:hover {
+    background-color: #a71d2a; /* Более темный красный при наведении */
+}
+
+.total-sailors {
+    text-align: center;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    font-size: 22px;
+}
+
+.loading-gif {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+}

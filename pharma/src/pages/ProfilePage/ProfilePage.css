@@ -1,0 +1,55 @@
+.profile-page {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .profile-page h1 {
+    text-align: center;
+  }
+  
+  .profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .profile-form label {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .profile-form input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .profile-form button {
+    padding: 10px;
+    font-size: 16px;
+    color: #000;
+    background-color: #ccc;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .profile-form button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .error {
+    color: red;
+    text-align: center;
+  }
+  
+  .profile__title {
+    display: flex;
+    color: #000;
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  

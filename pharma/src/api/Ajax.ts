@@ -1,4 +1,7 @@
+
 'use strict';
+
+import { getCookie } from "./Utils";
 
 interface RequestParams {
     url: string;
@@ -6,6 +9,10 @@ interface RequestParams {
     method: string;
 }
 
+interface PostParams {
+    url: string;
+    body: object;
+}
 
 class Ajax {
     static get(url: string): Promise<any> {
@@ -13,6 +20,18 @@ class Ajax {
             method: 'GET',
             url: url,
         });
+    }
+
+    static post({ url, body }: PostParams) {
+        return this.#makeRequest({ method: 'POST', url, body });
+    }
+
+    static put({ url, body }: PostParams) {
+        return this.#makeRequest({ method: 'PUT', url, body });
+    }
+
+    static delete({ url, body }: PostParams) {
+        return this.#makeRequest({ method: 'DELETE', url, body });
     }
 
     static async #makeRequest({
@@ -25,9 +44,7 @@ class Ajax {
         const timeoutId = setTimeout(() => {
             controller.abort();
         }, timeout);
-
-
-
+    
         try {
             let request: Request;
             if (method === 'GET') {
@@ -40,25 +57,31 @@ class Ajax {
                     signal: controller.signal,
                 });
             } else {
+                const csrfToken = getCookie('csrftoken');
+                if (!csrfToken) {
+                    console.log('here')
+                    throw new Error('CSRF token is missing');
+                }
                 request = new Request(url, {
                     method: method,
                     headers: {
                         'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
                     },
                     credentials: 'include',
                     body: JSON.stringify(body),
                     signal: controller.signal,
                 });
             }
-
+    
             const response = await fetch(request);
-            clearTimeout(timeoutId); // Отмена таймера, если запрос завершен до истечения времени
+            clearTimeout(timeoutId);
             return response;
         } catch (error) {
-            clearTimeout(timeoutId); // Отмена таймера в случае ошибки
+            clearTimeout(timeoutId);
             throw error;
         }
-    }
+    }    
 }
 
 export default Ajax;

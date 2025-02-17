@@ -28,14 +28,13 @@ export default defineConfig({
     },
     proxy: {
       '/api': {
-        target: 'http://192.168.31.169:8000',
+        target: 'http://localhost:8000',
         changeOrigin: true,
         secure: false,
         rewrite: (path) => path.replace(/^\/api/, '/'),
       },
     },
   },
-  base: "/Pharma",
   plugins: [
     react(),
     mkcert(),
