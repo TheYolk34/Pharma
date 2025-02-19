@@ -3,52 +3,57 @@
     padding-inline-start: 100px;
     padding-inline-end: 150px;
     display: flex;
-    flex-direction: row;
     align-items: center;
-    position: relative;
     justify-content: space-between;
+    position: relative;
+}
+
+.header .topline {
+    display: flex;
+    flex-direction: row; 
+    align-items: center;
+    height: 115px;    
 }
 
 .header img {
-    width: 500px;
+    width: 200px;
     height: auto;
 }
 
-.header a {
-    margin-left: 5%;
-    margin-top: 3%;
+.header-links {
+    display: flex; 
+    align-items: center;
+    gap: 20px;
 }
 
+.header a {
+    border: 1px solid #fff;
+    padding: 15px 25px;
+    color: #003333;
+    border-radius: 50px;
+    margin-right: 5px;
+    white-space: nowrap;
+}
+
+.button-exit {
+    padding: 8px 16px;
+    background-color: #ffdfe6;
+    border: 1px solid #d21e45;
+    cursor: pointer;
+}
+
+/* Псевдоэлемент для линии под хедером */
 .header::after {
     content: "";
     position: absolute;
     bottom: 0;
     left: 0;
-    width: 70%;
-    height: 2px;
-    margin-left: 15%;
-    background-color: #ffffff;
+    width: 100%;
+    height: 3px;
+    background-color: #e62c55; /* По умолчанию розовый */
 }
 
-@media (max-width: 400px) {
-    .header {
-        height: 80px;
-        padding-inline-start: 20px;
-        padding-inline-end: 20px;
-        justify-content: flex-start;
-    }
-
-    .header img {
-        width: 50px;
-        height: 50px;
-    }
-
-    .header a {
-        margin-left: 10px;
-    }
-
-    .header::after {
-        width: 90%;
-        margin-left: 5%;
-    }
+/* Для главной страницы линия белого цвета */
+.header.home::after {
+    background-color: white;
 }

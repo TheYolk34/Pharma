@@ -1,5 +1,5 @@
 import { FC, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Header.css";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store";
@@ -10,7 +10,8 @@ import { getCookie, deleteCookie } from "../../api/Utils";
 
 const Header: FC = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // Хук для навигации
+  const navigate = useNavigate();
+  const location = useLocation(); // Получаем текущий путь
   const { isLoggedIn, userName } = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
@@ -21,7 +22,7 @@ const Header: FC = () => {
         const data = await response.json();
         if (data.status === "ok" && data.username) {
           dispatch(login(data.username));
-        }
+        } 
       };
       checkSession();
     }
@@ -36,24 +37,26 @@ const Header: FC = () => {
   };
 
   return (
-    <nav className="header">
-      <Link to="/">
-        <img src="/logo.png" alt="Logo" />
-      </Link>
-      <div className="header-links">
-        <Link to="/illnesses">Болезни</Link>
-        <Link to="/drugs">Лекарства</Link>
-        {isLoggedIn ? (
-          <>
-            <Link to="/profile"><span>{userName}</span></Link>
-            <button onClick={handleLogout} className="button-exit">Выйти</button>
-          </>
-        ) : (
-          <Link to="/auth">
-            <button className="button-exit">Войти</button>
-          </Link>
-        )}
-      </div>
+    <nav className={`header ${location.pathname === "/" ? "home" : ""}`}>
+      <div className="topline">
+        <Link to="/">
+          <img className="logo" src="/logo.png" alt="Pharma" />
+        </Link>
+        <div className="header-links">
+          <Link to="/illnesses">Болезни</Link>
+          <Link to="/drugs">Лекарства</Link>
+          {isLoggedIn ? (
+            <>
+              <Link to="/profile"><span>{userName}</span></Link>
+              <button onClick={handleLogout} className="button-exit">Выйти</button>
+            </>
+          ) : (
+            <Link to="/auth">
+              <button className="button-exit">Войти</button>
+            </Link>
+          )}
+        </div>
+        </div>
     </nav>
   );
 };

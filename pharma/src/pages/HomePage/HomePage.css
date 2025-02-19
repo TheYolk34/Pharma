@@ -1,9 +1,9 @@
 .home {
     position: relative;
+    width: 100vw;
     overflow: hidden;
     text-align: center;
     color: white;
-    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;

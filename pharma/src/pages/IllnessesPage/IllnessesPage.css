@@ -1,12 +1,19 @@
 /* Общий контейнер страницы */
+
+
+/* Контейнер для контента */
 .clinpharm-content {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px;
+    width: 100%;
 }
 
-/* Контейнер для контента */
+.container {
+    width: 100%;
+    max-width: 1200px;
+}
 
 
 /* Поисковая строка */
@@ -77,13 +84,12 @@
 
 /* Контейнер для карточек (трехколоночный макет) */
 .cards-container {
-    padding-left: 10%;
-    padding-right: 10%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 100px;
+    justify-content: center;
+    width: 100%;
 }
-
 
 @media (max-width: 400px) {
     .illness-card-container {

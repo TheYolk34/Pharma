@@ -1,0 +1,27 @@
+
+<div class="cphi header">
+            <div class="container">
+                <div class="intro">
+                    <div class="topline">
+                        <a href="/ru/"><img class="logo" src="/app/img/logo.png" alt=""></a>
+                        <ul>
+                            <li><a href="/ru/about/">О компании</a></li>
+                            <li><a href="/ru/services/" class="selected">Услуги</a></li>
+                            <li><a href="/ru/career/">Карьера</a></li>
+                            <li><a href="/ru/contacts/">Контакты</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="intro-right regular">
+                <div class="topline-right">
+                    <ul>
+                        <li><a href="/ru/" class="selected">Рус</a></li>
+                        <li><a href="/en/">En</a></li>
+                    </ul>
+
+                    <a href="javascript:;" data-fancybox="" data-type="ajax" data-src="/fcgi-bin/cman/cman.fcgi?module=orders;object=form;action=get;groupid=1" class="cphi btn red">Свяжитесь с нами</a>
+                </div>            
+            </div>
+        </div>

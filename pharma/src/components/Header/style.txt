@@ -1,0 +1,113 @@
+
+
+.cphi.header {
+    position: relative;
+}
+
+.cphi.header h1 { margin-bottom: 8px; }
+.cphi.header .mission { margin: 48px 0; }
+
+.cphi.header .intro { 
+    width: 56%;
+    position: relative;
+    z-index: 3;
+}
+
+.cphi.header .intro .topline {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 115px;    
+}
+
+.cphi.header .intro .topline .logo { width: 260px; }
+
+.cphi.header .intro .topline ul {
+    list-style: none;
+    display: flex;
+    font: 16px "Roboto", sans-serif;
+    font-weight: 600;
+}
+
+.cphi.header .intro .topline ul li { }
+.cphi.header .intro .topline ul li a {
+    border: 1px solid #fff;
+    padding: 15px 25px;
+    color: #003333;
+    border-radius: 50px;
+    margin-right: 5px;
+    white-space: nowrap;
+}
+
+.cphi.header .intro .topline ul li a:hover { border: 1px solid #209470; }
+
+.cphi.header .intro .topline ul li a.selected { border: 1px solid #209470; }
+
+
+.cphi.header .box {
+    position: absolute;
+    width: 40%;
+    height: 630px;
+    left: 50%;
+    top: 100px;
+    border: 15px solid #fae033;
+    z-index: 1;
+    transform: rotate(-1.5deg);
+    margin-left: 150px;
+}
+
+.cphi.header .intro-right {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 667px;
+    background: url('/app/img/header-bg.png') 67px 0 no-repeat;
+    z-index: 2;
+}
+
+.cphi.header .intro-right.regular {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 118px;
+    background: url('/app/img/header-bg-regular.png') 67px 0 no-repeat;
+    z-index: 2;
+}
+
+.cphi.header .intro-right .topline-right {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    height: 115px;
+    width: 650px;
+}
+
+.cphi.header .intro-right .topline-right ul {
+    list-style: none;
+    display: flex;
+    font: 16px "Roboto", sans-serif;
+    font-weight: 600;
+    margin-right: 19px;
+}
+
+.cphi.header .intro-right .topline-right ul { }
+.cphi.header .intro-right .topline-right ul li a {
+    border: 1px solid transparent;
+    padding: 15px 38px;
+    color: #003333;
+    border-radius: 50px;
+    margin-right: 5px;    
+}
+
+.cphi.header .intro-right .topline-right ul li a:hover {
+    border: 1px solid #fff;
+    color: #fff;
+}
+
+.cphi.header .intro-right .topline-right ul li a.selected {
+    border: 1px solid #fff;
+    color: #fff;
+}

@@ -1,47 +1,81 @@
 .illness-card {
-    background: #b3e5fc; /* Голубой фон карточки */
     border-radius: 12px;
     overflow: hidden;
-    width: 300px; /* Фиксированная ширина, как в макете */
+    width: 100%;
+    max-width: 320px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease-in-out;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    cursor: pointer;
 }
 
 .illness-card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.illness-image-container {
+    width: 100%;
+    height: 160px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .illness-image {
     width: 100%;
-    height: 130px; /* Высота изображения, как в макете */
+    height: 100%;
     object-fit: cover;
 }
 
-.illness-name {
+.illness-info {
     width: 100%;
-    font-size: 1.2rem;
+    padding: 16px;
+    text-align: center;
+}
+
+.illness-title {
+    font-size: 1.5rem;
     font-weight: bold;
-    background: #00695c; /* Темно-зеленый цвет заголовка */
-    color: white;
-    text-align: center;
-    padding: 10px;
-}
-
-.illness-details {
-    font-size: 0.9rem;
+    margin-bottom: 8px;
     color: #333;
-    text-align: center;
-    padding: 10px;
 }
 
-/* Контейнер для карточек (трехколоночный макет) */
-.cards-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    justify-content: center;
-    padding: 20px;
+.illness-spread {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 12px;
 }
+
+.add-request-button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.add-request-button:hover {
+    background-color: #0056b3;
+}
+
+/* Адаптивность 
+@media (max-width: 768px) {
+    .illness-card {
+        max-width: 100%;
+    }
+
+    .illness-title {
+        font-size: 1.3rem;
+    }
+
+    .illness-spread {
+        font-size: 0.9rem;
+    }
+}*/
