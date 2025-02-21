@@ -17,6 +17,10 @@ interface APIResponse<T = any> {
 
 class API {
     private static instance: AxiosInstance;
+    private static navigate: any;
+    static setNavigate(navigate: any) {
+        this.navigate = navigate;
+    }
 
     private static getInstance(): AxiosInstance {
         if (!this.instance) {
@@ -45,6 +49,26 @@ class API {
             this.instance.interceptors.response.use(
                 (response) => response,
                 (error) => {
+                    const { response } = error;
+
+                    if (response) {
+                        const { status } = response;
+
+                        // Проверка на статус 401 или 403
+                        if (status === 401 || status === 403) {
+                            if (this.navigate) {
+                                this.navigate("/error/403");  // Переход на страницу ошибки 403
+                            } else {
+                                window.location.href = "/error/403";  // Для случаев, когда navigate недоступен
+                            }
+                        } else if (status === 404) {
+                            if (this.navigate) {
+                                this.navigate("/error/404");  // Переход на страницу ошибки 404
+                            } else {
+                                window.location.href = "/error/404";  // Для случаев, когда navigate недоступен
+                            }
+                        }
+                    }
                     console.error("[API Error]:", error.response?.data || error.message);
                     return Promise.reject(error);
                 }
@@ -85,7 +109,15 @@ class API {
     }
 
     static async getSession() {
-        return this.safeRequest(this.getInstance().get("users/check/"));
+        const response = await this.safeRequest(this.getInstance().get("users/check/"));
+        if (response.ok) {
+            const data = await response.json();
+            return { 
+                username: data.username, 
+                isStaff: data.is_staff 
+            };
+        }
+        return { username: null, isStaff: false };
     }
 
     static async getIllnesses(postfix?: string) {
@@ -122,14 +154,14 @@ class API {
         return this.safeRequest(this.getInstance().post(`illnesses/${id}/draft/`, {}));
     }
 
-    static async changeIllnessFields(illnessId: number, drugId: number, admiral?: string,) {
-        return this.safeRequest(this.getInstance().put(`drugs/${drugId}/illnesses/${illnessId}/`, { admiral: admiral }));
+    static async changeIllnessFields(illnessId: number, drugId: number, trial?: string,) {
+        return this.safeRequest(this.getInstance().put(`drugs/${drugId}/illnesses/${illnessId}/`, { trial: trial }));
     }
 
-    static async changeAddFields(id: number, drug_name?: string, result?: string) {
+    static async changeAddFields(id: number, name?: string, description?: string) {
         const body: Record<string, any> = {};
-        if (drug_name) body.drug_name = drug_name;
-        if (result) body.result = result;
+        if (name) body.name = name;
+        if (description) body.description = description;
         return this.safeRequest(this.getInstance().put(`drugs/${id}/edit/`, body));
     }
 
@@ -141,8 +173,36 @@ class API {
         return this.safeRequest(this.getInstance().put(`drugs/${drugId}/form/`, { status: "f" }));
     }
 
+    static async completeDrug(drugId: number) {
+        return this.safeRequest(this.getInstance().put(`drugs/${drugId}/complete/`, { status: "c" }));
+    }
+
+    static async rejectedDrug(drugId: number) {
+        return this.safeRequest(this.getInstance().put(`drugs/${drugId}/complete/`, { status: "r" }));
+    }
+
     static async deleteDrug(drugId: number) {
         return this.safeRequest(this.getInstance().delete(`drugs/${drugId}/`));
+    }
+
+    static async deleteIllness(illnessId: number) {
+        return this.safeRequest(this.getInstance().delete(`illnesses/${illnessId}/`));
+    }
+
+    static async changeIllness(illnessId: number, name?: string, description?: string, spread?: string) {
+        const body: Record<string, any> = {};
+        if (name) body.name = name;
+        if (description) body.description = description;
+        if (spread) body.spread = spread;
+        return this.safeRequest(this.getInstance().put(`illnesses/${illnessId}/`, body));
+    }
+
+    static async addIllness(name?: string, description?: string, spread?: string) {
+        const body: Record<string, any> = {};
+        if (name) body.name = name;
+        if (description) body.description = description;
+        if (spread) body.spread = spread;
+        return this.safeRequest(this.getInstance().post(`illnesses/`, body));
     }
 
     static async updateProfile(email?: string, password?: string) {

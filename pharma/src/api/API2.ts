@@ -47,12 +47,12 @@ const API = {
             const data = await Ajax.get(url);
             return data;
         } catch (error) {
-            console.error("Ошибка при загрузке данных о корабле:", error);
+            console.error("Ошибка при загрузке данных о болезне:", error);
             const mockILLNESS = ILLNESSES_MOCK.find((s) => s.id === illnessId);
             if (mockILLNESS) {
                 return mockILLNESS;
             } else {
-                throw new Error("Корабль не найден в мок-данных");
+                throw new Error("Болезнь не найден в мок-данных");
             }
         }
     },

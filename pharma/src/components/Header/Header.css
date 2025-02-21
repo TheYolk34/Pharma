@@ -8,16 +8,15 @@
     position: relative;
 }
 
-.header .topline {
+.header .topline { 
     display: flex;
     flex-direction: row; 
     align-items: center;
     height: 115px;    
 }
 
-.header img {
-    width: 200px;
-    height: auto;
+.header .logo {
+    width: 260px;
 }
 
 .header-links {

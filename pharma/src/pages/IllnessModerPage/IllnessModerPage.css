@@ -1,0 +1,93 @@
+.illness-card-moder {
+    display: flex;
+    align-items: flex-start;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.illness-photo-moder {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    background-color: #f0f0f0;
+    margin-right: 20px;
+    flex-shrink: 0;
+}
+
+.illness-name-link {
+    font-weight: bold;
+    text-decoration: none;
+    color:#000;
+}
+
+.illness-details-moder {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 10px;
+    width: 100%;
+}
+
+.illness-field {
+    font-size: 1.5rem; /* Увеличение размера шрифта */
+    font-weight: bold;
+    color: #000;
+    text-align: left;
+    word-wrap: break-word; /* Перенос текста на новую строку */
+}
+
+.illness-field strong {
+    display: block;
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.search-container-moder {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.illness-edit-button,
+.illness-delete-button,
+.illness-add-button-moder {
+    display: block; /* Чтобы кнопки встали по центру */
+    width: 130px; /* 20% ширины экрана */
+    margin: 10px auto; /* Центрирование по горизонтали и небольшой отступ между кнопками */
+    padding: 10px 0;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    color: white; /* Белый текст */
+}
+
+.illness-edit-button {
+  background-color: #007bff;
+  text-decoration: none;
+}
+
+.illness-add-button-moder {
+  background-color: #007bff;
+  text-decoration: none;
+  font-size: 20px !important;
+  width: 40% !important;
+}
+
+.illness-edit-button:hover,
+.illness-add-button-moder:hover {
+  background-color: #0056b3; /* Более темный синий при наведении */
+}
+
+.illness-delete-button {
+  background-color: #dc3545; /* Красный цвет */
+}
+
+.illness-delete-button:hover {
+  background-color: #a71d2a; /* Более темный красный при наведении */
+}

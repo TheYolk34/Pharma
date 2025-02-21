@@ -1,44 +1,39 @@
-import { FC, useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { FC, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { registerUser, loginUser } from '../../slices/userSlice';
-import { RootState } from '../../store';
+import { RootState, AppDispatch } from "../../store";
+import { registerUser, loginUser } from "../../slices/userSlice";
 import "./AuthPage.css";
+import { useDispatch } from "react-redux";
 
 const Auth: FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isRegister, setIsRegister] = useState(false);
-  const dispatch = useDispatch<any>();
+  const dispatch: AppDispatch = useDispatch(); // Указываем типизацию для dispatch
   const navigate = useNavigate();
-
-  const status = useSelector((state: RootState) => state.user.status);
-  const isLoggedIn = useSelector((state: RootState) => state.user.isLoggedIn);
+  const { loading, error } = useSelector((state: RootState) => state.user);
 
   const toggleAuthMode = () => setIsRegister((prev) => !prev);
 
-  useEffect(() => {
-    if (isLoggedIn) {
-        navigate("/illnesses");
-    }
-  }, [isLoggedIn, navigate]);
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (isRegister) {
-      dispatch(registerUser(email, password));
-    } else {
-      dispatch(loginUser(email, password));
+    try {
+      if (isRegister) {
+        await dispatch(registerUser({ email, password })).unwrap(); // `.unwrap()` для обработки ошибок из thunk
+        await dispatch(loginUser({ email, password })).unwrap();
+      } else {
+        await dispatch(loginUser({ email, password })).unwrap();
+      }
+      navigate("/");
+    } catch (err) {
+      console.error("Ошибка:", err);
     }
   };
 
-  const isLoading = status === 'loading';
-  const isFailed = status === 'failed';
-
   return (
     <div className="auth-page">
-      <h1>{isRegister ? 'Регистрация' : 'Вход'}</h1>
+      <h1>{isRegister ? "Регистрация" : "Вход"}</h1>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="email">Email:</label>
@@ -60,15 +55,15 @@ const Auth: FC = () => {
             required
           />
         </div>
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? 'Загрузка...' : isRegister ? 'Зарегистрироваться' : 'Войти'}
+        <button type="submit" disabled={loading}>
+          {loading ? "Загрузка..." : isRegister ? "Зарегистрироваться" : "Войти"}
         </button>
       </form>
-      {isFailed && <p>Произошла ошибка. Попробуйте снова.</p>}
+      {error && <p className="error">{error}</p>}
       <p>
-        {isRegister ? 'Уже есть аккаунт?' : 'Нет аккаунта?'}{' '}
+        {isRegister ? "Уже есть аккаунт?" : "Нет аккаунта?"}{" "}
         <button type="button" onClick={toggleAuthMode}>
-          {isRegister ? 'Войти' : 'Регистрация'}
+          {isRegister ? "Войти" : "Регистрация"}
         </button>
       </p>
     </div>

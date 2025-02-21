@@ -1,32 +1,23 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../store";
-import { login } from "../../slices/userSlice";
-import API from "../../api/API";
+import { RootState, AppDispatch } from "../../store";
+import { updateProfile  } from "../../slices/userSlice";
 import "./ProfilePage.css";
 
 const ProfilePage = () => {
-  const dispatch = useDispatch();
-  const userName = useSelector((state: RootState) => state.user.userName);
+  const dispatch: AppDispatch = useDispatch(); // Указываем типизацию для dispatch
+  const { userName, loading, error } = useSelector((state: RootState) => state.user);
 
   const [email, setEmail] = useState(userName || "");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const handleSave = async () => {
-    setIsLoading(true);
-    setError(null);
-
     try {
-      await API.updateProfile(email, password || undefined);
-      dispatch(login(email));
+      await dispatch(updateProfile({ email, password: password || undefined })).unwrap();
       setPassword("");
       alert("Данные успешно обновлены.");
-    } catch (err: any) {
-      setError(err.message || "Ошибка при обновлении профиля.");
-    } finally {
-      setIsLoading(false);
+    } catch (err) {
+      console.error("Ошибка обновления профиля:", err);
     }
   };
 
@@ -58,8 +49,8 @@ const ProfilePage = () => {
             placeholder="Введите новый пароль"
           />
         </label>
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? "Сохранение..." : "Сохранить"}
+        <button type="submit" disabled={loading}>
+          {loading ? "Сохранение..." : "Сохранить"}
         </button>
       </form>
       {error && <p className="error">{error}</p>}

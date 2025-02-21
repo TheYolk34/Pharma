@@ -14,6 +14,10 @@ import store from './store';
 import API from "./api/API";
 import DrugPage from './pages/DrugPage/DrugPage';
 import DrugsPage from './pages/DrugsPage/DrugsPage';
+import ErrorPage from './pages/ErrorPage/ErrorPage';
+import IllnessModerPage from './pages/IllnessModerPage/IllnessModerPage';
+import IllnessEditPage from './pages/IllnessEditPage/IllnessEditPage';
+import IllnessAddPage from './pages/IllnessAddPage/IllnessAddPage';
 
 // Функция для получения и установки CSRF-токена
 async function initializeCsrfToken() {
@@ -82,6 +86,38 @@ const router = createBrowserRouter(
       element: (
         <Layout>
           <DrugsPage />
+        </Layout>
+      ),
+    },
+    {
+      path: '/error/:errorCode',
+      element: (
+        <Layout>
+          <ErrorPage />
+        </Layout>
+      ),
+    },
+    {
+      path: '/moderator-illnesses',
+      element: (
+        <Layout>
+          <IllnessModerPage />
+        </Layout>
+      ),
+    },
+    {
+      path: '/edit-illnesses/:illnessId',
+      element: (
+        <Layout>
+          <IllnessEditPage />
+        </Layout>
+      ),
+    },
+    {
+      path: '/add-illnesses',
+      element: (
+        <Layout>
+          <IllnessAddPage />
         </Layout>
       ),
     },

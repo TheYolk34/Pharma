@@ -2,38 +2,29 @@ import { FC, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./Header.css";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store";
-import { login, logout } from "../../slices/userSlice";
+import { RootState, AppDispatch } from "../../store";
+import { loginUserFromSession, logoutUser } from "../../slices/userSlice";
 import { resetFilters } from "../../slices/illnessesSlice";
-import API from "../../api/API";
-import { getCookie, deleteCookie } from "../../api/Utils";
 
 const Header: FC = () => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation(); // Получаем текущий путь
-  const { isLoggedIn, userName } = useSelector((state: RootState) => state.user);
+  const { isLoggedIn, userName, isStaff } = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
-    const sessionId = getCookie("session_id");
-    if (sessionId) {
-      const checkSession = async () => {
-        const response = await API.getSession();
-        const data = await response.json();
-        if (data.status === "ok" && data.username) {
-          dispatch(login(data.username));
-        } 
-      };
-      checkSession();
-    }
+    // Проверка сессии при монтировании компонента
+    dispatch(loginUserFromSession());
   }, [dispatch]);
 
   const handleLogout = async () => {
-    dispatch(logout());
-    dispatch(resetFilters());
-    await API.logout();
-    deleteCookie("session_id");
-    navigate("/");
+    try {
+      await dispatch(logoutUser()).unwrap(); // Дожидаемся завершения действия
+      dispatch(resetFilters());
+      navigate("/"); // Переход на главную страницу
+    } catch (error) {
+      console.error("Ошибка при выходе из системы:", error);
+    }
   };
 
   return (
@@ -43,7 +34,7 @@ const Header: FC = () => {
           <img className="logo" src="/logo.png" alt="Pharma" />
         </Link>
         <div className="header-links">
-          <Link to="/illnesses">Болезни</Link>
+          <Link to={isStaff ? "/moderator-illnesses" : "/illnesses"}>Болезни</Link>
           <Link to="/drugs">Лекарства</Link>
           {isLoggedIn ? (
             <>

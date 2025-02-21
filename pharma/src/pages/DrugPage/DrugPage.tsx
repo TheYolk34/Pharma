@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import API from "../../api/API";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchDrugDetails, updateDrugFields, updateIllnessFields, deleteDrug, deleteIllnessFromDrug, formDrug } from "../../slices/drugsSlice";
+import { RootState, AppDispatch } from "../../store";
 import "./DrugPage.css";
 
 interface Illness {
@@ -8,7 +10,7 @@ interface Illness {
     name: string;
     spread: string;
     photo: string;
-}
+}   
 
 interface Drug {
     id: string;
@@ -23,54 +25,86 @@ interface Drug {
 const DrugPage = () => {
     const { drugId } = useParams<{ drugId: string }>();
     const navigate = useNavigate();
-    const [drug, setDrug] = useState<Drug | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const dispatch = useDispatch<AppDispatch>();
+    const { drug, loading, error } = useSelector((state: RootState) => state.drugs);
+
+    const [isFormValid, setIsFormValid] = useState(true);
+    const [formErrors, setFormErrors] = useState<{
+        name: boolean;
+        price: boolean;
+        description: boolean;
+        trial: boolean[];
+    }>({
+        name: false,
+        price: false,
+        description: false,
+        trial: []
+    });
+
+    const [localDrug, setLocalDrug] = useState<Drug | null>(null);
 
     useEffect(() => {
-        const getDrugDetails = async () => {
-            if (!drugId) {
-                setError("ID услуги не указан");
-                setLoading(false);
-                return;
-            }
+        if (drugId) {
+            dispatch(fetchDrugDetails(drugId));
+        }
+    }, [dispatch, drugId]);
 
-            try {
-                const response = await API.getDrugById(Number(drugId));
-                const data = await response.json();
-                setDrug({
-                    ...data,
-                    illnesses: data.illnesses || [],
-                });
-            } catch (error) {
-                console.error("Ошибка при загрузке данных о лекарстве:", error);
-                setError("Не удалось загрузить данные о лекарстве");
-            } finally {
-                setLoading(false);
-            }
-        };
+    useEffect(() => {
+        if (drug) {
+            setLocalDrug(drug);
+        }
+    }, [drug]);
 
-        getDrugDetails();
-    }, [drugId]);
-
-    if (loading) return <div className="loading-gif">Загрузка...</div>;
+    if (loading) return <div className="loading-gif"><img src="/loading.webp" alt="loading" /></div>;
     if (error) return <div>{error}</div>;
     if (!drug) return <div>Услуга не найдена.</div>;
 
     const isEditable = drug.status !== 'f' && drug.status !== 'c' && drug.status !== 'r';
 
+    const validateForm = () => {
+        if (!localDrug) return false;
+
+        const name = localDrug.name?.trim();
+        const price = localDrug.price;
+        const description = localDrug.description?.trim();
+        const trialEmpty = localDrug.illnesses.map(illness => !illness.trial?.trim());
+
+        setFormErrors({
+            name: !name,
+            price: !price,
+            description: !description,
+            trial: trialEmpty
+        });
+
+        if (!name || !price || trialEmpty.includes(true)) {
+            setIsFormValid(false);
+            return false;
+        }
+
+        setIsFormValid(true);
+        return true;
+    };
+
+
     const handleSubmit = async () => {
+        if (!validateForm()) {
+            return;
+        }
         try {
-            await API.formDrug(Number(drugId));
+            await dispatch(updateDrugFields({ drugId: Number(drugId), name: localDrug?.name || "", description: localDrug?.description || "",  price: localDrug?.price || 0 }));
+
+            await dispatch(formDrug(Number(drugId)));
             navigate('/');
         } catch (error) {
             console.error('Ошибка при оформлении услуги:', error);
         }
     };
 
+    
+
     const handleDelete = async () => {
         try {
-            await API.deleteDrug(Number(drugId));
+            await dispatch(deleteDrug(Number(drugId)));
             navigate('/');
         } catch (error) {
             console.error('Ошибка при удалении:', error);
@@ -78,54 +112,48 @@ const DrugPage = () => {
     };
 
     const handleIllnessDelete = async (illnessId: string, index: number) => {
-        if (!drug) return;
+        if (!localDrug) return;
         try {
-            await API.deleteIllnessFromDraft(Number(drugId), Number(illnessId));
-            const updatedIllnesses = [...drug.illnesses];
+            await dispatch(deleteIllnessFromDrug({ drugId: Number(drugId), illnessId: Number(illnessId) }));
+            const updatedIllnesses = [...localDrug.illnesses];
             updatedIllnesses.splice(index, 1);
-            setDrug({ ...drug, illnesses: updatedIllnesses });
+            setLocalDrug({ ...localDrug, illnesses: updatedIllnesses });
         } catch (error) {
             console.error('Ошибка при удалении болезни:', error);
         }
     };
 
-    const handleDrugNameBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
-        const newDrugName = e.target.value.trim();
-        if (!newDrugName) {
-            alert("Название услуги не может быть пустым");
-            return;
-        }
-
-        if (!drug) return;
-        setDrug({ ...drug, name: newDrugName });
-
+    const handleSaveChanges = async () => {
+        if (!localDrug) return;
         try {
-            await API.changeAddFields(Number(drugId), newDrugName);
-            console.log('Название лекарства обновлено');
+            await dispatch(updateDrugFields({ drugId: Number(drugId), name: localDrug.name, description: localDrug.description, price: localDrug.price }));
+
+            // Save trial changes for each illness
+            for (let i = 0; i < localDrug.illnesses.length; i++) {
+                const illnessId = localDrug.illnesses[i].illness.id;
+                const trial = localDrug.illnesses[i].trial;
+                await dispatch(updateIllnessFields({ illnessId: Number(illnessId), drugId: Number(drugId), trial }));
+            }
+
+            console.log('Изменения сохранены');
         } catch (error) {
-            console.error('Ошибка при обновлении названия лекарства:', error);
-            setDrug({ ...drug, name: drug.name });
+            console.error('Ошибка при сохранении изменений:', error);
         }
     };
 
-    const handleTrialBlur = async (e: React.FocusEvent<HTMLInputElement>, illnessId: string, index: number) => {
-        const newTrial = e.target.value;
-        if (!drug) return;
+    const handleInputChange = (field: string, value: string, index?: number) => {
+        if (!localDrug) return;
 
-        const updatedIllnesses = drug.illnesses.map((illnessObj, i) =>
-            i === index ? { ...illnessObj, trial: newTrial } : illnessObj
-        );
-        setDrug({ ...drug, illnesses: updatedIllnesses });
-
-        try {
-            await API.changeIllnessFields(Number(illnessId), Number(drugId), newTrial);
-            console.log('Испытание обновлено');
-        } catch (error) {
-            console.error('Ошибка при обновлении испытания:', error);
-            const revertedIllnesses = drug.illnesses.map((illnessObj, i) =>
-                i === index ? { ...illnessObj, trial: illnessObj.trial } : illnessObj
-            );
-            setDrug({ ...drug, illnesses: revertedIllnesses });
+        if (field === 'name') {
+            setLocalDrug({ ...localDrug, name: value });
+        } else if (field === 'description') {
+            setLocalDrug({ ...localDrug, description: value });
+        } else if (field === 'price') {
+            setLocalDrug({ ...localDrug, price: Number(value) });
+        } else if (field === 'trial' && index !== undefined) {
+            const updatedIllnesses = [...localDrug.illnesses];
+            updatedIllnesses[index] = { ...updatedIllnesses[index], trial: value };
+            setLocalDrug({ ...localDrug, illnesses: updatedIllnesses });
         }
     };
 
@@ -133,31 +161,33 @@ const DrugPage = () => {
         <div className="drug-page">
             <h1 className="drug-name-fix">Название услуги</h1>
             <input
-                defaultValue={drug.name}
+                value={localDrug?.name || ''}
                 type="text"
-                className="drug-name-input"
-                onBlur={handleDrugNameBlur}
+                className={`drug-name-input ${formErrors.name ? 'error' : ''}`}
+                onChange={(e) => handleInputChange('name', e.target.value)}
                 disabled={!isEditable}
             />
 
             <h1 className="drug-price-fix">Цена</h1>
             <input
-                defaultValue={drug.price}
+                value={localDrug?.price || ''}
                 type="number"
-                className="drug-price-input"
+                className={`drug-result-input ${formErrors.price ? 'error' : ''}`}
+                onChange={(e) => handleInputChange('price', e.target.value)}
                 disabled={!isEditable}
             />
 
             <h1 className="drug-price-fix">Описание</h1>
             <input
-                defaultValue={drug.description}
+                value={localDrug?.description || ''}
                 type="string"
-                className="drug-name-input"
+                className={`drug-result-input ${formErrors.description ? 'error' : ''}`}
+                onChange={(e) => handleInputChange('description', e.target.value)}
                 disabled={!isEditable}
             />
 
             <div className="illness-container">
-                {drug.illnesses.map(({ illness, trial }, index) => (
+                {localDrug?.illnesses.map(({ illness, trial }, index) => (
                     <div key={index} className="drug-row">
                         <div className="illness-card">
                             <div className="illness-content">
@@ -177,10 +207,10 @@ const DrugPage = () => {
                         <div className="trial-card">
                             <h2>Испытание</h2>
                             <input
+                                value={trial || ''}
                                 type="text"
-                                defaultValue={trial}
-                                className="trial-input"
-                                onBlur={(e) => handleTrialBlur(e, illness.id, index)}
+                                className={`admiral-input ${formErrors.trial[index] ? 'error' : ''}`}
+                                onChange={(e) => handleInputChange('trial', e.target.value, index)}
                                 disabled={!isEditable}
                             />
                         </div>
@@ -191,7 +221,8 @@ const DrugPage = () => {
             <div className="button-container">
                 {isEditable && (
                     <>
-                        <button className="drug-submit" onClick={handleSubmit}>Оформить</button>
+                        <button className="drug-save-changes" onClick={handleSaveChanges} disabled={!isEditable}> Сохранить изменения </button>
+                        <button className="drug-submit" onClick={handleSubmit} disabled={!isFormValid}>Оформить</button>
                         <button className="drug-delete" onClick={handleDelete}>Удалить</button>
                     </>
                 )}

@@ -1,58 +1,42 @@
-import { useEffect, useState } from "react";
+import { useEffect, FC } from "react";
 import { useParams } from "react-router-dom";
-import API from "../../api/API";
+import { useDispatch, useSelector } from "react-redux";
 import { BreadCrumbs } from "../../components/BreadCrumbs/BreadCrumbs";
 import { ROUTE_LABELS } from "../../Route.tsx";
-import { ILLNESSES_MOCK } from "../../modules/mock";
+import { fetchIllnessDetails } from "../../slices/illnessSlice";
+import { AppDispatch } from "../../store";
+import { RootState } from "../../store";
 import "./IllnessPage.css";
 
-interface Illness {
-    id: string;
-    name: string;
-    description: string;
-    photo: string;
-}
-
-const IllnessPage = () => {
+const IllnessPage: FC = () => {
     const { illnessId } = useParams<{ illnessId: string }>();
-    const [illness, setIllness] = useState<Illness | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const dispatch = useDispatch<AppDispatch>();
+    const { illnessDetails, loading, error } = useSelector((state: RootState) => state.illness);
+    const { isStaff } = useSelector((state: RootState) => state.user);
 
     useEffect(() => {
-        const getIllnessDetails = async () => {
-            if (!illnessId) return;
-
-            try {
-                const response = await API.getIllnessDetails(illnessId);
-                const data = await response.json();
-                setIllness(data);
-            } catch (error) {
-                console.error("Ошибка при загрузке данных о болезни:", error);
-                const mockIllness = ILLNESSES_MOCK.find((i) => String(i.id) === illnessId);
-                if (mockIllness) {
-                    setIllness(mockIllness);
-                    setError(null);
-                } else {
-                    setError("Болезнь не найдена в mock-данных");
-                }
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        getIllnessDetails();
-    }, [illnessId]);
+        if (illnessId) {
+            dispatch(fetchIllnessDetails(illnessId));
+        }
+    }, [dispatch, illnessId]);
+    
+    useEffect(() => {
+        console.log(illnessDetails);  // Добавьте лог для проверки
+    }, [illnessDetails]);
 
     if (loading) {
-        return <div>Загрузка...</div>;
+        return (
+            <div className="loading-gif">
+                <img src="/loading.webp" alt="Loading" />
+            </div>
+        );
     }
 
     if (error) {
         return <div>{error}</div>;
     }
 
-    if (!illness) {
+    if (!illnessDetails) {
         return <div>Болезнь не найдена.</div>;
     }
 
@@ -61,19 +45,19 @@ const IllnessPage = () => {
             <div className="breadcrumbs-illness">
                 <BreadCrumbs
                     crumbs={[
-                        { label: ROUTE_LABELS.ILLNESSES, path: '/illnesses' },
-                        { label: illness.name || "Болезнь" },
+                        { label: isStaff ? ROUTE_LABELS.MODER_ILLNESSES : ROUTE_LABELS.ILLNESSES, path: isStaff ? "/moderator-illnesses" : "/illnesses" },
+                        { label: illnessDetails.name || "Болезнь" },
                     ]}
                 />
             </div>
             <div className="illness-page">
                 <div className="illness-details">
                     <div className="illness-image-card">
-                        <img src={illness.photo} alt={illness.name} />
+                        <img src={illnessDetails.photo} alt={illnessDetails.name} />
                     </div>
                     <div className="illness-info">
-                        <h1>{illness.name}</h1>
-                        <p><strong>Описание:</strong> {illness.description}</p>
+                        <h1>{illnessDetails.name}</h1>
+                        <p><strong>Описание:</strong> {illnessDetails.description}</p>
                     </div>
                 </div>
             </div>
