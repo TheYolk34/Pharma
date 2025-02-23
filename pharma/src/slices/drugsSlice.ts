@@ -14,7 +14,7 @@ interface Drug {
     id: string;
     name: string;
     description: string;
-    price: number;
+    price?: number;
     illnesses: { illness: Illness; trial: string }[];
     created_at: string;
     formed_at: string;
@@ -47,7 +47,7 @@ export const fetchDrugDetails = createAsyncThunk<Drug, string>(
     }
 );
 
-export const updateDrugFields = createAsyncThunk<void, { drugId: number; name: string; description: string, price: number }>(
+export const updateDrugFields = createAsyncThunk<void, { drugId: number; name: string; description: string }>(
     "drugs/updateDrugFields",
     async ({ drugId, name, description }) => {
         await API.changeAddFields(drugId, name, description);

@@ -16,7 +16,6 @@ interface Drug {
     id: string;
     name: string;
     description: string;
-    price: number;
     illnesses: { illness: Illness; trial: string }[];
     created_at: string;
     status: string;
@@ -31,12 +30,10 @@ const DrugPage = () => {
     const [isFormValid, setIsFormValid] = useState(true);
     const [formErrors, setFormErrors] = useState<{
         name: boolean;
-        price: boolean;
         description: boolean;
         trial: boolean[];
     }>({
         name: false,
-        price: false,
         description: false,
         trial: []
     });
@@ -65,18 +62,16 @@ const DrugPage = () => {
         if (!localDrug) return false;
 
         const name = localDrug.name?.trim();
-        const price = localDrug.price;
         const description = localDrug.description?.trim();
         const trialEmpty = localDrug.illnesses.map(illness => !illness.trial?.trim());
 
         setFormErrors({
             name: !name,
-            price: !price,
             description: !description,
             trial: trialEmpty
         });
 
-        if (!name || !price || trialEmpty.includes(true)) {
+        if (!name || trialEmpty.includes(true)) {
             setIsFormValid(false);
             return false;
         }
@@ -85,13 +80,16 @@ const DrugPage = () => {
         return true;
     };
 
-
     const handleSubmit = async () => {
         if (!validateForm()) {
             return;
         }
         try {
-            await dispatch(updateDrugFields({ drugId: Number(drugId), name: localDrug?.name || "", description: localDrug?.description || "",  price: localDrug?.price || 0 }));
+            await dispatch(updateDrugFields({ 
+                drugId: Number(drugId), 
+                name: localDrug?.name || "", 
+                description: localDrug?.description || "" 
+            }));
 
             await dispatch(formDrug(Number(drugId)));
             navigate('/');
@@ -99,8 +97,6 @@ const DrugPage = () => {
             console.error('Ошибка при оформлении услуги:', error);
         }
     };
-
-    
 
     const handleDelete = async () => {
         try {
@@ -126,7 +122,11 @@ const DrugPage = () => {
     const handleSaveChanges = async () => {
         if (!localDrug) return;
         try {
-            await dispatch(updateDrugFields({ drugId: Number(drugId), name: localDrug.name, description: localDrug.description, price: localDrug.price }));
+            await dispatch(updateDrugFields({ 
+                drugId: Number(drugId), 
+                name: localDrug.name, 
+                description: localDrug.description 
+            }));
 
             // Save trial changes for each illness
             for (let i = 0; i < localDrug.illnesses.length; i++) {
@@ -148,8 +148,6 @@ const DrugPage = () => {
             setLocalDrug({ ...localDrug, name: value });
         } else if (field === 'description') {
             setLocalDrug({ ...localDrug, description: value });
-        } else if (field === 'price') {
-            setLocalDrug({ ...localDrug, price: Number(value) });
         } else if (field === 'trial' && index !== undefined) {
             const updatedIllnesses = [...localDrug.illnesses];
             updatedIllnesses[index] = { ...updatedIllnesses[index], trial: value };
@@ -159,36 +157,37 @@ const DrugPage = () => {
 
     return (
         <div className="drug-page">
-            <h1 className="drug-name-fix">Название услуги</h1>
-            <input
-                value={localDrug?.name || ''}
-                type="text"
-                className={`drug-name-input ${formErrors.name ? 'error' : ''}`}
-                onChange={(e) => handleInputChange('name', e.target.value)}
-                disabled={!isEditable}
-            />
+            <div className="drug-detail">
+                <h1 className="drug-name-fix">Название услуги</h1>
+                <input
+                    value={localDrug?.name || ''}
+                    type="text"
+                    className={`drug-name-input ${formErrors.name ? 'error' : ''}`}
+                    onChange={(e) => handleInputChange('name', e.target.value)}
+                    disabled={!isEditable}
+                />
 
-            <h1 className="drug-price-fix">Цена</h1>
-            <input
-                value={localDrug?.price || ''}
-                type="number"
-                className={`drug-result-input ${formErrors.price ? 'error' : ''}`}
-                onChange={(e) => handleInputChange('price', e.target.value)}
-                disabled={!isEditable}
-            />
-
-            <h1 className="drug-price-fix">Описание</h1>
-            <input
-                value={localDrug?.description || ''}
-                type="string"
-                className={`drug-result-input ${formErrors.description ? 'error' : ''}`}
-                onChange={(e) => handleInputChange('description', e.target.value)}
-                disabled={!isEditable}
-            />
-
+                <h1 className="drug-price-fix">Описание</h1>
+                <input
+                    value={localDrug?.description || ''}
+                    type="string"
+                    className={`drug-description-input ${formErrors.description ? 'error' : ''}`}
+                    onChange={(e) => handleInputChange('description', e.target.value)}
+                    disabled={!isEditable}
+                />
+                <div className="button-container">
+                {isEditable && (
+                    <>
+                        <button className="drug-save-changes" onClick={handleSaveChanges} disabled={!isEditable}> Сохранить изменения </button>
+                        <button className="drug-submit" onClick={handleSubmit} disabled={!isFormValid}>Оформить</button>
+                        <button className="drug-delete" onClick={handleDelete}>Удалить</button>
+                    </>
+                )}
+            </div>
+            </div>
             <div className="illness-container">
                 {localDrug?.illnesses.map(({ illness, trial }, index) => (
-                    <div key={index} className="drug-row">
+                    <div key={index} className="illness-row">
                         <div className="illness-card">
                             <div className="illness-content">
                                 <img src={illness.photo} alt={illness.name} className="illness-photo" />
@@ -203,29 +202,18 @@ const DrugPage = () => {
                             </div>
                         </div>
 
-
                         <div className="trial-card">
                             <h2>Испытание</h2>
                             <input
                                 value={trial || ''}
                                 type="text"
-                                className={`admiral-input ${formErrors.trial[index] ? 'error' : ''}`}
+                                className={`trial-input ${formErrors.trial[index] ? 'error' : ''}`}
                                 onChange={(e) => handleInputChange('trial', e.target.value, index)}
                                 disabled={!isEditable}
                             />
                         </div>
                     </div>
                 ))}
-            </div>
-
-            <div className="button-container">
-                {isEditable && (
-                    <>
-                        <button className="drug-save-changes" onClick={handleSaveChanges} disabled={!isEditable}> Сохранить изменения </button>
-                        <button className="drug-submit" onClick={handleSubmit} disabled={!isFormValid}>Оформить</button>
-                        <button className="drug-delete" onClick={handleDelete}>Удалить</button>
-                    </>
-                )}
             </div>
         </div>
     );

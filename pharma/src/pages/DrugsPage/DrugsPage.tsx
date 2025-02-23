@@ -9,7 +9,7 @@ interface Drug {
   id: string;
   name: string;
   description: string;
-  price: number;
+  price?: number;
   created_at: string;
   formed_at: string;
   completed_at: string;
@@ -168,7 +168,7 @@ const DrugsPage = () => {
               </div>
             )}
             <div className="drug-row-section">
-              {drug.status === 'f' ? (
+              {drug.status != 'c' ? (
                 <img className="status-icon" src="/time.svg" alt="Time Icon" />
               ) : (
                 <div className="qr-hover-wrapper">
