@@ -12,7 +12,7 @@ interface Illness {
     photo: string;
 }   
 
-interface Drug {
+interface Drug { 
     id: string;
     name: string;
     description: string;

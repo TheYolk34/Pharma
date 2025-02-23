@@ -1,4 +1,5 @@
 /* IllnessCard.css */
+/*
 .illness-card {
     border: 1px solid #ccc;
     border-radius: 10px;
@@ -6,6 +7,10 @@
     background: linear-gradient(to bottom, #e0f7fa, #80deea);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     cursor: pointer;
+}
+
+.illness-page {
+    width: 1200px;
 }
 
 .illness-card:hover {
@@ -93,3 +98,4 @@
         font-size: 18px;
     }
 }
+*/

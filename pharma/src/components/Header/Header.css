@@ -1,7 +1,7 @@
 .header {
     height: 100px;
-    padding-inline-start: 100px;
-    padding-inline-end: 150px;
+    padding-inline-start: 30px;
+    padding-inline-end: 50px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -12,36 +12,51 @@
     display: flex;
     flex-direction: row; 
     align-items: center;
-    height: 115px;    
+    height: 115px;   
+    width: 100%;
+    box-sizing: border-box; 
 }
 
 .header .logo {
     width: 260px;
+    flex: 0 0 auto;
 }
 
-.header-links {
-    display: flex; 
+.header .nav-links {
+    flex: 1 1 auto;       
+    display: flex;
+    justify-content: center;
     align-items: center;
-    gap: 20px;
+    gap: 30px;
 }
+
+.header a:hover { border: 2px solid #db2445; }
+
+.header .auth-links {
+    flex: 0 0 auto;
+    display: flex;
+    gap: 15px;
+}
+
 
 .header a {
-    border: 1px solid #fff;
+    font: 20px "Roboto", sans-serif;
+    font-weight: 600;
     padding: 15px 25px;
-    color: #003333;
+    color: #000000;
     border-radius: 50px;
     margin-right: 5px;
     white-space: nowrap;
 }
 
-.button-exit {
-    padding: 8px 16px;
-    background-color: #ffdfe6;
-    border: 1px solid #d21e45;
+
+.header .button-exit {
+    padding: 0px 50px;
+    background-color: #ffffff;
+    border: 2px solid #db2445;
     cursor: pointer;
 }
 
-/* Псевдоэлемент для линии под хедером */
 .header::after {
     content: "";
     position: absolute;
@@ -49,10 +64,27 @@
     left: 0;
     width: 100%;
     height: 3px;
-    background-color: #e62c55; /* По умолчанию розовый */
+    background-color: #e62c55;
 }
 
 /* Для главной страницы линия белого цвета */
 .header.home::after {
     background-color: white;
+}
+
+.header.home a{
+    color: #ffffff;
+}
+
+.header.home a:hover { border: 2px solid #ffffff; }
+
+.header.home .button-exit {
+    background-color: transparent;
+    border: 2px solid #ffffff;
+    color: #ffffff;
+}
+
+.header.home {
+    padding-inline-start: 0px;
+    padding-inline-end: 0px;
 }

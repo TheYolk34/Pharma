@@ -26,16 +26,18 @@ const Header: FC = () => {
       console.error("Ошибка при выходе из системы:", error);
     }
   };
-
+ 
   return (
     <nav className={`header ${location.pathname === "/" ? "home" : ""}`}>
       <div className="topline">
         <Link to="/">
           <img className="logo" src="/logo.png" alt="Pharma" />
         </Link>
-        <div className="header-links">
+        <div className="nav-links">
           <Link to={isStaff ? "/moderator-illnesses" : "/illnesses"}>Болезни</Link>
           <Link to="/drugs">Лекарства</Link>
+        </div>
+        <div className="auth-links">
           {isLoggedIn ? (
             <>
               <Link to="/profile"><span>{userName}</span></Link>
@@ -47,7 +49,7 @@ const Header: FC = () => {
             </Link>
           )}
         </div>
-        </div>
+      </div>
     </nav>
   );
 };

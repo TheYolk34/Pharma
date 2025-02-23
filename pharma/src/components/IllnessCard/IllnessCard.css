@@ -1,34 +1,58 @@
 .illness-card {
-    border-radius: 12px;
-    overflow: hidden;
-    width: 100%;
-    max-width: 320px;
+    border-radius: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    padding: 20px;
     cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    max-width: 350px;
+    width: 100%;
 }
 
 .illness-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.illness-card-shadow {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: 5%;
+    width: 90%;
+    height: 100%;
+    border: 10px solid #fae033;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.illness-card:hover .illness-card-shadow {
+    opacity: 1;
 }
 
 .illness-image-container {
     width: 100%;
-    height: 160px;
+    height: 200px;
     overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
+    border: 4px solid white;
+    border-radius: 10px;
+    background: #fff;
 }
 
 .illness-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 6px;
 }
 
 .illness-info {
@@ -38,15 +62,15 @@
 }
 
 .illness-title {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     font-weight: bold;
     margin-bottom: 8px;
-    color: #333;
+    color: #fff;
 }
 
 .illness-spread {
-    font-size: 1rem;
-    color: #555;
+    font-size: 1.1rem;
+    color: #eee;
     margin-bottom: 12px;
 }
 

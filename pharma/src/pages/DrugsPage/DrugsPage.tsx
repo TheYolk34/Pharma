@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { AppDispatch, RootState } from '../../store'; // Убедитесь, что путь правильный
-import { fetchDrugs, completeDrug, rejectedDrug } from '../../slices/drugsSlice'; // Импортируем thunk
+import { AppDispatch, RootState } from '../../store';
+import { fetchDrugs, completeDrug, rejectedDrug } from '../../slices/drugsSlice';
 import './DrugsPage.css';
 
 interface Drug {
@@ -15,6 +15,7 @@ interface Drug {
   completed_at: string;
   status: string;
   creator: string;
+  qr?: string; // Новое поле для QR-кода
 }
 
 const DrugsPage = () => {
@@ -22,23 +23,19 @@ const DrugsPage = () => {
   const [dateFrom, setDateFrom] = useState<string>('');
   const [dateTo, setDateTo] = useState<string>('');
   const [status, setStatus] = useState<string>('');
-  const [authorFilter, setAuthorFilter] = useState<string>(''); // Добавляем фильтр по создателю
+  const [authorFilter, setAuthorFilter] = useState<string>('');
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
   const { isStaff } = useSelector((state: RootState) => state.user);
   const { drugs, loading, error } = useSelector((state: RootState) => state.drugs);
 
-  console.log(drugs); // Проверьте, что drugs — это массив
-  // Загрузка данных через thunk
   useEffect(() => {
     dispatch(fetchDrugs(status));
     const intervalId = setInterval(() => dispatch(fetchDrugs(status)), 10000);
-
     return () => clearInterval(intervalId);
   }, [status, dispatch]);
 
-  // Фильтрация по дате и создателю
   useEffect(() => {
     const filtered = drugs.filter((drug) => {
       const drugDate = new Date(drug.created_at);
@@ -51,12 +48,11 @@ const DrugsPage = () => {
         (!authorFilter || drug.creator.toLowerCase().includes(authorFilter.toLowerCase()))
       );
     });
-
     setFilteredDrugs(filtered);
   }, [dateFrom, dateTo, drugs, authorFilter]);
 
   const formatDate = (dateString: string): string =>
-    dateString ? dateString.split('T')[0] : '—'; // Обрезаем до YYYY-MM-DD
+    dateString ? dateString.split('T')[0] : '—';
 
   const getStatusText = (status: string): string => {
     switch (status) {
@@ -80,7 +76,7 @@ const DrugsPage = () => {
   };
 
   const getPriceText = (price: number | null): string =>
-    price && price > 0 ? price.toString() : '—'; // Условие для пустого или нулевого значения
+    price && price > 0 ? price.toString() : '—';
 
   if (loading) return <div>Загрузка...</div>;
   if (error) return <div>Ошибка: {error}</div>;
@@ -135,15 +131,14 @@ const DrugsPage = () => {
       </div>
 
       <div className="drugs-list">
-        <div className="drug-row header">
-          <div className="drug-row-section"><strong>№</strong></div>
+        <div className="drugs-header">
+          <div className="drug-row-section id-section"><strong>№</strong></div>
           <div className="drug-row-section"><strong>Название</strong></div>
           <div className="drug-row-section"><strong>Статус</strong></div>
-          <div className="drug-row-section"><strong>Цена</strong></div>
-          <div className="drug-row-section"><strong>Дата создания</strong></div>
           <div className="drug-row-section"><strong>Дата формирования</strong></div>
           <div className="drug-row-section"><strong>Дата завершения</strong></div>
           {isStaff && <div className="drug-row-section"><strong>Создатель</strong></div>}
+          <div className="drug-row-section"><strong>QR-код</strong></div> {/* Новый столбец для QR-кода */}
           {isStaff && <div className="drug-row-section"><strong>Действие</strong></div>}
         </div>
         {filteredDrugs.map((drug) => (
@@ -152,7 +147,7 @@ const DrugsPage = () => {
             className="drug-row"
             onClick={() => navigate(`/drugs/${drug.id}`)}
           >
-            <div className="drug-row-section">
+            <div className="drug-row-section id-section">
               <div>{drug.id}</div>
             </div>
             <div className="drug-row-section">
@@ -162,24 +157,31 @@ const DrugsPage = () => {
               <div>{getStatusText(drug.status)}</div>
             </div>
             <div className="drug-row-section">
-              <div>{getPriceText(drug.price)}</div>
-            </div>
-            <div className="drug-row-section">
-              <div>{formatDate(drug.created_at)}</div>
-            </div>
-            <div className="drug-row-section">
               <div>{formatDate(drug.formed_at)}</div>
             </div>
             <div className="drug-row-section">
               <div>{formatDate(drug.completed_at)}</div>
             </div>
-
             {isStaff && (
               <div className="drug-row-section">
                 <div>{drug.creator}</div>
               </div>
             )}
-
+            <div className="drug-row-section">
+              {drug.status === 'f' ? (
+                <img className="status-icon" src="/time.svg" alt="Time Icon" />
+              ) : (
+                <div className="qr-hover-wrapper">
+                  <img className="status-icon" src="/href.svg" alt="QR Icon" />
+                  {drug.qr && (
+                    <div className="qr-hover">
+                      <img className="qr-code" src={`data:image/png;base64,${drug.qr}`} alt="QR Code" />
+                      <p>Цена: {drug.price} ₽</p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
             {isStaff && (
               <div className="drug-row-section">
                 {drug.status === "f" ? (

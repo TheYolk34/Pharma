@@ -10,12 +10,14 @@ interface Illness {
     name: string;
     spread: string;
     photo: string;
-    color?: string; // Добавлен цвет карточки
 }
 
 interface IllnessCardProps {
     illness: Illness;
 }
+
+const colors = ["#1e946f", "#39c2a7", "#209470", "#3cc09a", "#25a280", "#46d7c0"];
+const rotations = ["1.2deg", "-6deg", "4deg", "-3deg", "8deg", "-4deg"];
 
 const IllnessCard: React.FC<IllnessCardProps> = ({ illness }) => {
     const navigate = useNavigate();
@@ -44,10 +46,14 @@ const IllnessCard: React.FC<IllnessCardProps> = ({ illness }) => {
         }
     };
 
+    const index = Number(illness.id) % 6;
+    const backgroundColor = colors[index];
+    const rotation = rotations[index];
+
     return (
         <div 
-            className="illness-card" 
-            style={{ backgroundColor: illness.color || "#f5f5f5" }} 
+            className="illness-card"
+            style={{ backgroundColor }}
             onClick={handleTitleClick}
         >
             <div className="illness-image-container">
@@ -55,11 +61,15 @@ const IllnessCard: React.FC<IllnessCardProps> = ({ illness }) => {
             </div>
             <div className="illness-info">
                 <h2 className="illness-title">{illness.name}</h2>
-                <p className="illness-spread">Способ передачи: {illness.spread}</p>
+                <p className="illness-spread">Тип передачи: {illness.spread}</p>
                 <button className="add-request-button" onClick={handleAddRequest}>
                     Добавить заявку
                 </button>
             </div>
+            <div 
+                className="illness-card-shadow"
+                style={{ transform: `rotate(${rotation})` }}
+            ></div>
         </div>
     );
 };

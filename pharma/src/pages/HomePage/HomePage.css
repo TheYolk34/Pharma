@@ -1,12 +1,13 @@
 .home {
     position: relative;
-    width: 100vw;
+    width: 1200px;
     overflow: hidden;
     text-align: center;
     color: white;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    justify-content: center;
 }
 
 .overlay {
@@ -20,12 +21,17 @@
 }
 
 .content {
+    display: flex;              
+    flex-direction: column;     
+    justify-content: center;    
+    align-items: center;        
     position: relative;
     z-index: 1;
     max-width: 600px;
     padding: 20px;
     text-align: center;
     margin: 0 auto;
+
 }
 
 .content h1 {
@@ -41,6 +47,7 @@
 
 .custom-button {
     padding: 24px 48px;
+    margin-top: 20px;
     font-size: 1.6rem;
     color: #fff;
     background-color: transparent;
@@ -50,8 +57,6 @@
 }
 
 .custom-button:hover {
-    background-color: #fff;
-    color: #000;
     transform: scale(1.05);
 }
 

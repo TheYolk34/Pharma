@@ -157,7 +157,7 @@
     border: none;
     cursor: pointer;
     text-align: center;
-    color: white; /* Белый текст */
+    color: white; /* Белый текст */ 
 }
 
 .illness-delete {

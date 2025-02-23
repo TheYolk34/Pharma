@@ -64,7 +64,7 @@ const IllnessesPage: FC = () => {
                         <input
                             type="text"
                             className="search-input"
-                            placeholder="Способ передачи болезни"
+                            placeholder="Тип передачи болезни" 
                             value={searchQuery}
                             onChange={handleSearchChange}
                         />
