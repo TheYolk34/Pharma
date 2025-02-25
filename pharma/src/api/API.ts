@@ -25,7 +25,7 @@ class API {
     private static getInstance(): AxiosInstance {
         if (!this.instance) {
             this.instance = axios.create({
-                baseURL: "https://192.168.31.169:3000/api/",
+                baseURL: "https://172.20.10.3:3000/api/",
                 withCredentials: true,
                 headers: {
                     "Content-Type": "application/json",

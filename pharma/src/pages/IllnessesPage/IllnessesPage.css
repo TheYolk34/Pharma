@@ -54,6 +54,53 @@
     max-width: 1200px;
 }
 
+.bucket-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+}
+
+/* Иконка корзины */
+.bucket-icon {
+    width: 64px;
+    height: 64px;
+    transition: transform 0.2s ease;
+}
+
+.bucket-container:hover .bucket-icon {
+    transform: scale(1.1);
+}
+
+/* Счетчик */
+.bucket-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #ff4444;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+.bucket-container:hover .bucket-count {
+    transform: scale(1.1);
+}
+
+/* Состояние когда счетчик = 0 */
+.disabled-bucket {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 @media (max-width: 400px) {
     .illness-card-container {
         width: 66.7%;

@@ -64,19 +64,18 @@ const IllnessesPage: FC = () => {
                         <input
                             type="text"
                             className="search-input"
-                            placeholder="Тип передачи болезни" 
+                            placeholder="Поиск по типу передачи болезни..."
                             value={searchQuery}
                             onChange={handleSearchChange}
                         />
-                        <div
-                            onClick={count > 0 ? handleGoToDrug : undefined}
-                            style={{ cursor: count > 0 ? 'pointer' : 'not-allowed' }}
-                        >
-                            <img src="/plus.png" className="bucket-icon" />
-                            <span className="bucket-count">{count}</span>
-                        </div>
                     </div>
-                    
+                    <div 
+                        className={`bucket-container ${count > 0 ? '' : 'disabled-bucket'}`}
+                        onClick={count > 0 ? handleGoToDrug : undefined}
+                    >
+                        <img src="/plus.png" className="bucket-icon" alt="Перейти к лекарствам" />
+                        <span className="bucket-count">{count}</span>
+                    </div>
                 </div>
                 <div className="cards-container three-columns">
                     {loading ? (
